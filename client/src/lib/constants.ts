@@ -1,100 +1,55 @@
-/**
- * API endpoint constants
- */
+// API endpoints
 export const API_ENDPOINTS = {
   AUTH: {
-    SESSION: '/api/auth/session',
     LOGIN: '/api/auth/login',
-    REGISTER: '/api/auth/register',
     LOGOUT: '/api/auth/logout',
-    PROFILE: '/api/auth/profile'
+    REGISTER: '/api/auth/register',
+    SESSION: '/api/auth/session',
+    PROFILE: '/api/auth/profile',
   },
   COURSES: {
     LIST: '/api/courses',
-    DETAILS: (id: number) => `/api/courses/${id}`,
-    ENROLL: '/api/enrollments',
-    MY_COURSES: '/api/courses/my-courses',
-    MODULES: (courseId: number) => `/api/courses/${courseId}/modules`,
-    PROGRESS: (enrollmentId: number) => `/api/enrollments/${enrollmentId}/progress`
+    DETAIL: (id: number) => `/api/courses/${id}`,
+    ENROLL: (id: number) => `/api/courses/${id}/enroll`,
+    MY_COURSES: '/api/courses/enrolled',
   },
   ASSIGNMENTS: {
     LIST: '/api/assignments',
-    DETAILS: (id: number) => `/api/assignments/${id}`,
-    SUBMIT: (id: number) => `/api/assignments/${id}/submit`,
+    DETAIL: (id: number) => `/api/assignments/${id}`,
     MY_ASSIGNMENTS: '/api/assignments/my-assignments',
-    SUBMISSIONS: (id: number) => `/api/assignments/${id}/submissions`
+    SUBMIT: (id: number) => `/api/assignments/${id}/submit`,
   },
   MESSAGES: {
     LIST: '/api/messages',
+    DETAIL: (id: number) => `/api/messages/${id}`,
     SEND: '/api/messages/send',
-    DETAILS: (id: number) => `/api/messages/${id}`,
-    MARK_READ: (id: number) => `/api/messages/${id}/read`
+    UNREAD_COUNT: '/api/messages/unread-count',
   },
-  FORUMS: {
-    LIST: '/api/forums',
-    TOPICS: (forumId: number) => `/api/forums/${forumId}/topics`,
-    POSTS: (topicId: number) => `/api/topics/${topicId}/posts`,
-    CREATE_TOPIC: '/api/topics',
-    CREATE_POST: (topicId: number) => `/api/topics/${topicId}/posts`,
+  USERS: {
+    LIST: '/api/users',
+    DETAIL: (id: number) => `/api/users/${id}`,
+    TEACHERS: '/api/users/teachers',
+    STUDENTS: '/api/users/students',
+  },
+  FORUM: {
+    TOPICS: '/api/forum/topics',
+    TOPIC_DETAIL: (id: number) => `/api/forum/topics/${id}`,
+    POSTS: '/api/forum/posts',
+    POST_DETAIL: (id: number) => `/api/forum/posts/${id}`,
   },
   LABS: {
     LIST: '/api/labs',
-    DETAILS: (id: number) => `/api/labs/${id}`,
-    MY_LABS: '/api/labs/my-labs',
+    DETAIL: (id: number) => `/api/labs/${id}`,
   },
   TOOLS: {
     LIST: '/api/tools',
-    DETAILS: (id: number) => `/api/tools/${id}`,
+    MATH_SOLVER: '/api/tools/math-solver',
+    WRITING_ASSISTANT: '/api/tools/writing-assistant',
+    LANGUAGE_TRANSLATOR: '/api/tools/language-translator',
   }
 };
 
-/**
- * Navigation constants
- */
-export const NAVIGATION_ITEMS = [
-  { title: 'Home', href: '/home', icon: 'Home' },
-  { title: 'Courses', href: '/courses', icon: 'BookOpen' },
-  { title: 'Assignments', href: '/assignments', icon: 'FileText' },
-  { title: 'Messages', href: '/messages', icon: 'MessageSquare' },
-  { title: 'Forums', href: '/forums', icon: 'MessageCircle' },
-  { title: 'Virtual Labs', href: '/labs', icon: 'Flask' },
-  { title: 'Learning Tools', href: '/tools', icon: 'Tool' },
-];
-
-/**
- * User role constants
- */
-export const USER_ROLES = {
-  STUDENT: 'student',
-  TEACHER: 'teacher',
-  ADMIN_TEACHER: 'admin_teacher',
-  PARENT: 'parent',
-  ADMIN: 'admin',
-};
-
-/**
- * Assignment constants
- */
-export const ASSIGNMENT_STATUSES = {
-  NOT_STARTED: 'not_started',
-  IN_PROGRESS: 'in_progress',
-  SUBMITTED: 'submitted',
-  GRADED: 'graded',
-  LATE: 'late',
-};
-
-/**
- * Course constants
- */
-export const COURSE_LEVELS = [
-  { value: 'beginner', label: 'Beginner' },
-  { value: 'intermediate', label: 'Intermediate' },
-  { value: 'advanced', label: 'Advanced' },
-];
-
-/**
- * Subject constants
- */
+// Subject Areas
 export const SUBJECT_AREAS = [
   { value: 'mathematics', label: 'Mathematics' },
   { value: 'science', label: 'Science' },
@@ -108,13 +63,119 @@ export const SUBJECT_AREAS = [
   { value: 'languages', label: 'Languages' },
 ];
 
-/**
- * Grade level constants
- */
+// Course Levels
+export const COURSE_LEVELS = [
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+];
+
+// Assignment Statuses
+export const ASSIGNMENT_STATUSES = [
+  { value: 'not_started', label: 'Not Started' },
+  { value: 'in_progress', label: 'In Progress' },
+  { value: 'submitted', label: 'Submitted' },
+  { value: 'graded', label: 'Graded' },
+  { value: 'late', label: 'Late' },
+];
+
+// User Roles
+export const USER_ROLES = [
+  { value: 'student', label: 'Student' },
+  { value: 'teacher', label: 'Teacher' },
+  { value: 'admin_teacher', label: 'Admin Teacher' },
+  { value: 'parent', label: 'Parent' },
+  { value: 'admin', label: 'Admin' },
+];
+
+// Grade Levels
 export const GRADE_LEVELS = [
-  { value: 'elementary', label: 'Elementary (Grades 1-5)' },
-  { value: 'middle_school', label: 'Middle School (Grades 6-8)' },
-  { value: 'high_school', label: 'High School (Grades 9-12)' },
+  { value: 'elementary', label: 'Elementary School' },
+  { value: 'middle', label: 'Middle School' },
+  { value: 'high', label: 'High School' },
   { value: 'college', label: 'College/University' },
   { value: 'professional', label: 'Professional Development' },
+];
+
+// Forum Categories
+export const FORUM_CATEGORIES = [
+  { value: 'general', label: 'General Discussion' },
+  { value: 'course_specific', label: 'Course Specific' },
+  { value: 'homework_help', label: 'Homework Help' },
+  { value: 'technical_support', label: 'Technical Support' },
+  { value: 'events', label: 'Events & Announcements' },
+];
+
+// Learning Tool Types
+export const LEARNING_TOOL_TYPES = [
+  { value: 'math_solver', label: 'Math Problem Solver' },
+  { value: 'writing_assistant', label: 'Writing Assistant' },
+  { value: 'language_translator', label: 'Language Translator' },
+  { value: 'formula_calculator', label: 'Formula Calculator' },
+  { value: 'citation_generator', label: 'Citation Generator' },
+];
+
+// Virtual Lab Types
+export const VIRTUAL_LAB_TYPES = [
+  { value: 'chemistry', label: 'Chemistry Lab' },
+  { value: 'physics', label: 'Physics Lab' },
+  { value: 'biology', label: 'Biology Lab' },
+  { value: 'computer_science', label: 'Computer Science Lab' },
+  { value: 'engineering', label: 'Engineering Lab' },
+];
+
+// Duration options (in minutes)
+export const DURATION_OPTIONS = [
+  { value: 15, label: '15 minutes' },
+  { value: 30, label: '30 minutes' },
+  { value: 45, label: '45 minutes' },
+  { value: 60, label: '1 hour' },
+  { value: 90, label: '1.5 hours' },
+  { value: 120, label: '2 hours' },
+];
+
+// Message types
+export const MESSAGE_TYPES = [
+  { value: 'direct', label: 'Direct Message' },
+  { value: 'course_announcement', label: 'Course Announcement' },
+  { value: 'system_notification', label: 'System Notification' },
+];
+
+// Navigation items for sidebar/navbar
+export const NAVIGATION_ITEMS = [
+  { 
+    label: 'Dashboard', 
+    href: '/home',
+    icon: 'LayoutDashboard'
+  },
+  { 
+    label: 'Courses', 
+    href: '/courses',
+    icon: 'GraduationCap' 
+  },
+  { 
+    label: 'Assignments', 
+    href: '/assignments',
+    icon: 'FileText' 
+  },
+  { 
+    label: 'Messages', 
+    href: '/messages',
+    icon: 'MessageSquare' 
+  },
+  { 
+    label: 'Forums', 
+    href: '/forums',
+    icon: 'MessageCircle' 
+  },
+  { 
+    label: 'Virtual Labs', 
+    href: '/labs',
+    icon: 'Beaker' 
+  },
+  { 
+    label: 'Learning Tools', 
+    href: '/tools',
+    icon: 'Wrench' 
+  },
 ];

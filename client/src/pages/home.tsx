@@ -5,7 +5,7 @@ import { defaultFetcher } from '@/lib/query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
-import { BookOpen, FileText, MessageSquare, Flask, Tool } from 'lucide-react';
+import { BookOpen, FileText, MessageSquare, Beaker, Wrench } from 'lucide-react';
 
 export default function Home() {
   const [, navigate] = useLocation();
@@ -73,7 +73,7 @@ export default function Home() {
               className="flex flex-col items-center justify-center h-32 text-center p-4"
               onClick={() => navigate('/labs')}
             >
-              <Flask className="h-8 w-8 mb-2 text-amber-600 dark:text-amber-400" />
+              <Beaker className="h-8 w-8 mb-2 text-amber-600 dark:text-amber-400" />
               <span className="text-sm font-medium">Virtual Labs</span>
             </Button>
           </CardContent>
@@ -205,7 +205,7 @@ export default function Home() {
                 className="flex flex-col items-center justify-center h-24 text-center p-4"
                 onClick={() => navigate('/tools')}
               >
-                <Tool className="h-5 w-5 mb-1" />
+                <Wrench className="h-5 w-5 mb-1" />
                 <span className="text-sm font-medium">All Tools</span>
               </Button>
             </div>
