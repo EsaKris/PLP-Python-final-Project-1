@@ -12,10 +12,15 @@ import AuthPage from '@/pages/auth-page';
 import NotFoundPage from '@/pages/not-found';
 import HomePage from '@/pages/home';
 import CoursesPage from '@/pages/courses';
+import CoursesCreatePage from '@/pages/courses-create';
 import AssignmentsPage from '@/pages/assignments';
+import AssignmentsCreatePage from '@/pages/assignments-create';
 import MessagesPage from '@/pages/messages';
 import ProfilePage from '@/pages/profile';
 import VirtualLabsPage from '@/pages/virtual-labs';
+import GradesPage from '@/pages/grades';
+import ForumsPage from '@/pages/forums';
+import LearningToolsPage from '@/pages/learning-tools';
 
 // Layouts
 import MainLayout from '@/components/layouts/MainLayout';
@@ -83,7 +88,7 @@ function AuthenticatedApp() {
       {(userRole === 'teacher' || userRole === 'admin_teacher' || userRole === 'admin') && (
         <ProtectedRoute path="/courses/create" component={() => (
           <MainLayout>
-            <PlaceholderPage title="Create New Course" />
+            <CoursesCreatePage />
           </MainLayout>
         )} />
       )}
@@ -105,7 +110,7 @@ function AuthenticatedApp() {
       {(userRole === 'teacher' || userRole === 'admin_teacher' || userRole === 'admin') && (
         <ProtectedRoute path="/assignments/create" component={() => (
           <MainLayout>
-            <PlaceholderPage title="Create New Assignment" />
+            <AssignmentsCreatePage />
           </MainLayout>
         )} />
       )}
@@ -113,7 +118,7 @@ function AuthenticatedApp() {
       {/* Students/Teacher routes */}
       <ProtectedRoute path="/grades" component={() => (
         <MainLayout>
-          <PlaceholderPage title={userRole === 'teacher' || userRole === 'admin_teacher' ? "Grade Book" : "My Grades"} />
+          <GradesPage />
         </MainLayout>
       )} />
       
