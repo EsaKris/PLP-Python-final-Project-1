@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await apiRequest("POST", "/api/auth/login", credentials);
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.message || "Login failed");
+        throw new Error(error.error || "Login failed");
       }
       return await res.json();
     },
@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/auth/session"], { authenticated: true, user });
       toast({
         title: "Login successful",
-        description: `Welcome back, ${user.first_name || user.email}!`,
+        description: `Welcome back, ${user.firstName || user.email}!`,
       });
     },
     onError: (error: Error) => {
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await apiRequest("POST", "/api/auth/register", userData);
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.message || "Registration failed");
+        throw new Error(error.error || "Registration failed");
       }
       return await res.json();
     },
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/auth/session"], { authenticated: true, user });
       toast({
         title: "Registration successful",
-        description: `Welcome, ${user.first_name || user.email}!`,
+        description: `Welcome, ${user.firstName || user.email}!`,
       });
     },
     onError: (error: Error) => {
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await apiRequest("POST", "/api/auth/logout");
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.message || "Logout failed");
+        throw new Error(error.error || "Logout failed");
       }
     },
     onSuccess: () => {
