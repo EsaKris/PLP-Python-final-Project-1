@@ -167,13 +167,25 @@ export default function AccountSettingsPage() {
   // Update account mutation
   const updateAccountMutation = useMutation({
     mutationFn: async (data: AccountFormValues) => {
-      // Add the profile image if it exists
-      const accountData = {
-        ...data,
-        profileImage,
-      };
+      const formData = new FormData();
       
-      const res = await apiRequest("PUT", "/api/auth/profile", accountData);
+      // Add all form fields
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      });
+      
+      // Add profile image if it exists
+      if (profileImage) {
+        formData.append('profile_image', profileImage);
+      }
+      
+      const res = await apiRequest("PUT", "/api/auth/profile", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return await res.json();
     },
     onSuccess: () => {

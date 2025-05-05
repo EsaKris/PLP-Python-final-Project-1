@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework import viewsets
 
 from .serializers import (
     UserSerializer, UserProfileSerializer, RegisterSerializer,
@@ -146,3 +147,42 @@ class StudentListView(APIView):
             return Response(serializer.data)
         # Students can't see other students
         return Response({"message": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+from rest_framework import viewsets, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import User
+from .serializers import UserSerializer
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_children(request):
+    if not request.user.is_parent():
+        return Response({'error': 'Only parents can access this endpoint'}, 
+                       status=status.HTTP_403_FORBIDDEN)
+
+    children = request.user.children.all()
+    serializer = UserSerializer(children, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_progress_reports(request):
+    if not request.user.is_parent():
+        return Response({'error': 'Only parents can access this endpoint'}, 
+                       status=status.HTTP_403_FORBIDDEN)
+
+    children = request.user.children.all()
+    reports = []
+    for child in children:
+        # Get grades, attendance, and other metrics for each child
+        reports.append({
+            'child_id': child.id,
+            'name': child.full_name,
+            'grade_level': child.grade_level,
+            'attendance': '95%',  # This would come from an attendance model
+            'average_grade': 'A-', # This would come from a grades model
+            'behavior': 'Excellent'
+        })
+    return Response(reports)
