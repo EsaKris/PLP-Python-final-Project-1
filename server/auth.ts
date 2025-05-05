@@ -21,6 +21,8 @@ declare global {
       role: string;
       firstName: string;
       lastName: string;
+      first_name?: string;
+      last_name?: string;
     }
   }
 }
@@ -82,6 +84,8 @@ export function setupAuth(app: Express) {
             role: user.role,
             firstName: user.firstName,
             lastName: user.lastName,
+            first_name: user.firstName,
+            last_name: user.lastName,
           });
         }
       } catch (err) {
@@ -108,6 +112,8 @@ export function setupAuth(app: Express) {
         role: user.role,
         firstName: user.firstName,
         lastName: user.lastName,
+        first_name: user.firstName,
+        last_name: user.lastName,
       });
     } catch (err) {
       done(err, null);
@@ -144,6 +150,8 @@ export function setupAuth(app: Express) {
         role: newUser.role,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
+        first_name: newUser.firstName,
+        last_name: newUser.lastName,
       }, (err) => {
         if (err) return next(err);
         
