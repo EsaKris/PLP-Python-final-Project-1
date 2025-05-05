@@ -1,9 +1,9 @@
 import React from 'react';
-import { Route, Switch } from 'wouter';
+import { Route, Switch, Redirect } from 'wouter';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { Toaster } from '@/components/ui/toaster';
-import { AuthProvider } from '@/hooks/use-auth';
+import { AuthProvider, useAuth } from '@/hooks/use-auth';
 import { ProtectedRoute } from '@/lib/protected-route';
 
 // Pages
@@ -18,11 +18,15 @@ import MessagesPage from '@/pages/messages';
 // Layouts
 import MainLayout from '@/components/layouts/MainLayout';
 
-function AppRoutes() {
+function AuthenticatedApp() {
+  const { user, isLoading } = useAuth();
+  
   return (
     <Switch>
       {/* Public routes */}
-      <Route path="/" component={LandingPage} />
+      <Route path="/">
+        {user && !isLoading ? <Redirect to="/home" /> : <LandingPage />}
+      </Route>
       <Route path="/auth" component={AuthPage} />
       
       {/* Protected routes */}
@@ -78,7 +82,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppRoutes />
+        <AuthenticatedApp />
         <Toaster />
       </AuthProvider>
     </QueryClientProvider>

@@ -63,7 +63,7 @@ export default function AuthPage() {
 
   // If user is already logged in, redirect to home page
   if (user && !isLoading) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home" />;
   }
 
   const onLoginSubmit = (data: LoginFormValues) => {
