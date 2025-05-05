@@ -53,7 +53,7 @@ export default function MessagesPage() {
         role: 'student'
       },
       subject: 'Programming Assignment Feedback',
-      content: 'Hello! I've reviewed your latest programming assignment and have some feedback. Your solution to the array manipulation problem was very efficient, but there are a couple of edge cases you didn't handle. Let me know if you'd like to discuss this further.',
+      content: "Hello! I've reviewed your latest programming assignment and have some feedback. Your solution to the array manipulation problem was very efficient, but there are a couple of edge cases you didn't handle. Let me know if you'd like to discuss this further.",
       timestamp: '2025-05-04T14:30:00Z',
       isRead: false,
       type: 'inbox'
@@ -73,7 +73,7 @@ export default function MessagesPage() {
         role: 'student'
       },
       subject: 'Math Assignment Due Date Extended',
-      content: 'I wanted to let you know that I've extended the due date for the calculus problem set to next Friday. This should give everyone additional time to work through the more challenging problems. As always, feel free to come to office hours if you need assistance.',
+      content: "I wanted to let you know that I've extended the due date for the calculus problem set to next Friday. This should give everyone additional time to work through the more challenging problems. As always, feel free to come to office hours if you need assistance.",
       timestamp: '2025-05-03T10:15:00Z',
       isRead: true,
       type: 'inbox'
@@ -93,7 +93,7 @@ export default function MessagesPage() {
         role: 'teacher'
       },
       subject: 'Question about the Final Project',
-      content: 'Good afternoon Dr. Smith, I'm working on the final project for the programming class and had a question about the requirements. The assignment mentions using a database, but doesn't specify what type. Would it be acceptable to use SQLite for this project, or would you prefer we use PostgreSQL as we did in the earlier modules?',
+      content: "Good afternoon Dr. Smith, I'm working on the final project for the programming class and had a question about the requirements. The assignment mentions using a database, but doesn't specify what type. Would it be acceptable to use SQLite for this project, or would you prefer we use PostgreSQL as we did in the earlier modules?",
       timestamp: '2025-05-02T16:45:00Z',
       isRead: true,
       type: 'sent'
@@ -113,7 +113,7 @@ export default function MessagesPage() {
         role: 'student'
       },
       subject: 'Study Group for History Exam',
-      content: 'Hi there! A few of us are forming a study group for the upcoming history exam. We're planning to meet at the library this Saturday from 2-4 PM. Would you like to join us? We'll be focusing on the post-World War II era which Prof. Williams mentioned would be a significant part of the exam.',
+      content: "Hi there! A few of us are forming a study group for the upcoming history exam. We're planning to meet at the library this Saturday from 2-4 PM. Would you like to join us? We'll be focusing on the post-World War II era which Prof. Williams mentioned would be a significant part of the exam.",
       timestamp: '2025-05-01T09:20:00Z',
       isRead: true,
       type: 'inbox'
@@ -133,7 +133,7 @@ export default function MessagesPage() {
         role: 'teacher'
       },
       subject: 'Clarification on Homework #3',
-      content: 'Hello Professor Johnson, I'm working on problem #5 of the latest homework and I'm having trouble understanding what formula should be applied here. The problem asks us to find the limit, but I'm not sure if we should be using L'Hôpital's rule or another approach. Could you please clarify?',
+      content: "Hello Professor Johnson, I'm working on problem #5 of the latest homework and I'm having trouble understanding what formula should be applied here. The problem asks us to find the limit, but I'm not sure if we should be using L'Hôpital's rule or another approach. Could you please clarify?",
       timestamp: '2025-04-29T11:05:00Z',
       isRead: true,
       type: 'sent'
@@ -153,7 +153,7 @@ export default function MessagesPage() {
         role: 'student'
       },
       subject: 'New Assignment Posted',
-      content: 'A new assignment "Web Development Final Project" has been posted to your Web Development Bootcamp course. The assignment is due on May 20, 2025. Please login to view the full details and requirements.',
+      content: "A new assignment \"Web Development Final Project\" has been posted to your Web Development Bootcamp course. The assignment is due on May 20, 2025. Please login to view the full details and requirements.",
       timestamp: '2025-04-28T08:00:00Z',
       isRead: true,
       type: 'inbox'
