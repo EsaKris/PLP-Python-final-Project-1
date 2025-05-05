@@ -218,7 +218,7 @@ export default function ProfilePage() {
   };
 
   // Handle image upload
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       // Preview the image
@@ -228,8 +228,35 @@ export default function ProfilePage() {
       };
       reader.readAsDataURL(file);
       
-      // Set the file in form data
-      profileForm.setValue('profileImage', file);
+      // Create form data and append file
+      const formData = new FormData();
+      formData.append('profile_image', file);
+      
+      try {
+        const response = await fetch('/api/auth/profile/image', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to upload image');
+        }
+        
+        toast({
+          title: "Profile image updated",
+          description: "Your profile image has been updated successfully.",
+        });
+        
+        // Invalidate profile cache to get updated image
+        queryClient.invalidateQueries([API_ENDPOINTS.AUTH.PROFILE]);
+      } catch (error) {
+        toast({
+          title: "Error uploading image",
+          description: error instanceof Error ? error.message : 'Failed to upload image',
+          variant: "destructive",
+        });
+      }
     }
   };
 

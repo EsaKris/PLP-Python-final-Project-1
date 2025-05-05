@@ -96,6 +96,35 @@ class UserProfileView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def post(self, request):
+        if 'profile_image' not in request.FILES:
+            return Response(
+                {'error': 'No image file provided'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        image = request.FILES['profile_image']
+        
+        # Optional: Validate file type
+        if not image.content_type.startswith('image/'):
+            return Response(
+                {'error': 'File must be an image'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        user = request.user
+        # Delete old image if it exists to save space
+        if user.profile_image:
+            user.profile_image.delete(save=False)
+            
+        user.profile_image = image
+        user.save()
+        
+        return Response({
+            'message': 'Profile image updated successfully',
+            'image_url': user.profile_image.url if user.profile_image else None
+        })
+
 
 class ChangePasswordView(APIView):
     """View for changing user password"""
