@@ -212,14 +212,7 @@ export const learningTools = pgTable("learning_tools", {
 });
 
 // Validation schemas
-export const insertUserSchema = createInsertSchema(users).transform((data) => {
-  // Handle both camelCase and snake_case field names
-  return {
-    ...data,
-    firstName: data.first_name || data.firstName,
-    lastName: data.last_name || data.lastName
-  };
-});
+export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
