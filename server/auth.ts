@@ -19,8 +19,8 @@ declare global {
       username: string;
       email: string;
       role: string;
-      first_name: string;
-      last_name: string;
+      firstName: string;
+      lastName: string;
     }
   }
 }
@@ -80,8 +80,8 @@ export function setupAuth(app: Express) {
             username: user.username || '',
             email: user.email,
             role: user.role,
-            first_name: user.first_name,
-            last_name: user.last_name,
+            firstName: user.firstName,
+            lastName: user.lastName,
           });
         }
       } catch (err) {
@@ -106,8 +106,8 @@ export function setupAuth(app: Express) {
         username: user.username || '',
         email: user.email,
         role: user.role,
-        first_name: user.first_name,
-        last_name: user.last_name,
+        firstName: user.firstName,
+        lastName: user.lastName,
       });
     } catch (err) {
       done(err, null);
@@ -132,8 +132,8 @@ export function setupAuth(app: Express) {
       const [newUser] = await db.insert(users).values({
         ...userData,
         password: hashedPassword,
-        created_at: new Date(),
-        updated_at: new Date()
+        createdAt: new Date(),
+        updatedAt: new Date()
       }).returning();
 
       // Log the user in
@@ -142,8 +142,8 @@ export function setupAuth(app: Express) {
         username: newUser.username || '',
         email: newUser.email,
         role: newUser.role,
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
       }, (err) => {
         if (err) return next(err);
         
