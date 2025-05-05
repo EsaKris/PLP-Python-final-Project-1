@@ -16,8 +16,8 @@ const loginSchema = z.object({
 });
 
 const registerSchema = z.object({
-  firstName: z.string().min(2, "First name is required"),
-  lastName: z.string().min(2, "Last name is required"),
+  first_name: z.string().min(2, "First name is required"),
+  last_name: z.string().min(2, "Last name is required"),
   username: z.string().min(2, "Username is required"),
   email: z.string().email("Valid email is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -42,8 +42,8 @@ export default function AuthPage() {
   const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       username: "",
       email: "",
       password: "",
@@ -148,10 +148,10 @@ export default function AuthPage() {
                     <Input 
                       id="first-name" 
                       placeholder="John" 
-                      {...registerForm.register("firstName")} 
+                      {...registerForm.register("first_name")} 
                     />
-                    {registerForm.formState.errors.firstName && (
-                      <p className="text-sm text-red-500">{registerForm.formState.errors.firstName.message}</p>
+                    {registerForm.formState.errors.first_name && (
+                      <p className="text-sm text-red-500">{registerForm.formState.errors.first_name.message}</p>
                     )}
                   </div>
                   <div className="space-y-2">
@@ -159,10 +159,10 @@ export default function AuthPage() {
                     <Input 
                       id="last-name" 
                       placeholder="Doe" 
-                      {...registerForm.register("lastName")} 
+                      {...registerForm.register("last_name")} 
                     />
-                    {registerForm.formState.errors.lastName && (
-                      <p className="text-sm text-red-500">{registerForm.formState.errors.lastName.message}</p>
+                    {registerForm.formState.errors.last_name && (
+                      <p className="text-sm text-red-500">{registerForm.formState.errors.last_name.message}</p>
                     )}
                   </div>
                 </div>

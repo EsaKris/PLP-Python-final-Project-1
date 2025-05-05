@@ -12,12 +12,12 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email").notNull().unique(),
-  firstName: text("firstName").notNull(),
-  lastName: text("lastName").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
   role: roleEnum("role").notNull(),
-  profileImage: text("profileImage"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  profileImage: text("profile_image"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
