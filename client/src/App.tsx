@@ -14,6 +14,8 @@ import HomePage from '@/pages/home';
 import CoursesPage from '@/pages/courses';
 import AssignmentsPage from '@/pages/assignments';
 import MessagesPage from '@/pages/messages';
+import ProfilePage from '@/pages/profile';
+import VirtualLabsPage from '@/pages/virtual-labs';
 
 // Layouts
 import MainLayout from '@/components/layouts/MainLayout';
@@ -48,7 +50,7 @@ function AuthenticatedApp() {
       
       <ProtectedRoute path="/profile" component={() => (
         <MainLayout>
-          <PlaceholderPage title="User Profile" />
+          <ProfilePage />
         </MainLayout>
       )} />
       
@@ -71,9 +73,9 @@ function AuthenticatedApp() {
         </MainLayout>
       )} />
       
-      <ProtectedRoute path="/courses/:id" component={({ params }) => (
+      <ProtectedRoute path="/courses/:id" component={(props) => (
         <MainLayout>
-          <PlaceholderPage title={`Course Detail: ${params.id}`} />
+          <PlaceholderPage title={`Course Detail: ${props.params?.id || ''}`} />
         </MainLayout>
       )} />
       
@@ -93,9 +95,9 @@ function AuthenticatedApp() {
         </MainLayout>
       )} />
       
-      <ProtectedRoute path="/assignments/:id" component={({ params }) => (
+      <ProtectedRoute path="/assignments/:id" component={(props) => (
         <MainLayout>
-          <PlaceholderPage title={`Assignment Detail: ${params.id}`} />
+          <PlaceholderPage title={`Assignment Detail: ${props.params?.id || ''}`} />
         </MainLayout>
       )} />
       
@@ -136,13 +138,13 @@ function AuthenticatedApp() {
       {/* Virtual Labs */}
       <ProtectedRoute path="/labs" component={() => (
         <MainLayout>
-          <PlaceholderPage title="Virtual Labs" />
+          <VirtualLabsPage />
         </MainLayout>
       )} />
       
-      <ProtectedRoute path="/labs/:id" component={({ params }) => (
+      <ProtectedRoute path="/labs/:id" component={(props) => (
         <MainLayout>
-          <PlaceholderPage title={`Lab: ${params.id}`} />
+          <PlaceholderPage title={`Lab: ${props.params?.id || ''}`} />
         </MainLayout>
       )} />
       
@@ -153,9 +155,9 @@ function AuthenticatedApp() {
         </MainLayout>
       )} />
       
-      <ProtectedRoute path="/forums/:id" component={({ params }) => (
+      <ProtectedRoute path="/forums/:id" component={(props) => (
         <MainLayout>
-          <PlaceholderPage title={`Forum Topic: ${params.id}`} />
+          <PlaceholderPage title={`Forum Topic: ${props.params?.id || ''}`} />
         </MainLayout>
       )} />
       

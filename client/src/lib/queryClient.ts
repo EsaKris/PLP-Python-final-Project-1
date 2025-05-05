@@ -76,3 +76,17 @@ export function isAuthenticated() {
 export function getCurrentUser() {
   return queryClient.getQueryData<any>(['api/auth/profile']);
 }
+
+// Default fetcher function for useQuery
+export const defaultFetcher = async ({ queryKey }) => {
+  const [url, params] = Array.isArray(queryKey) ? queryKey : [queryKey];
+  
+  const response = await apiRequest('GET', url, params);
+  
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || `API request failed: ${response.status}`);
+  }
+  
+  return response.json();
+};
