@@ -1,420 +1,320 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { PencilIcon, UserPlus } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
-import { API_ENDPOINTS } from "@/lib/constants";
-import { queryClient } from "@/lib/queryClient";
-import { Message, User } from "@/lib/types";
-import { useToast } from "@/hooks/use-toast";
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { API_ENDPOINTS } from '@/lib/constants';
+import { defaultFetcher } from '@/lib/query';
+import { useLocation } from 'wouter';
+import { 
+  Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle, 
+  CardDescription, 
+  CardFooter 
+} from '@/components/ui/card';
+import { 
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { 
+  MessageSquare, 
+  Search, 
+  Send, 
+  User, 
+  Inbox, 
+  Send as SendIcon, 
+  PenBox
+} from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { formatDate } from '@/lib/utils';
 
-export default function Messages() {
-  const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
-  const [messageText, setMessageText] = useState("");
-  const [newMessageDialogOpen, setNewMessageDialogOpen] = useState(false);
-  const [selectedReceiver, setSelectedReceiver] = useState<number | null>(null);
-  const { toast } = useToast();
+export default function MessagesPage() {
+  const [, navigate] = useLocation();
+  const [activeTab, setActiveTab] = useState('inbox');
+  
+  // Mock messages data for demo
+  const messages = [
+    {
+      id: 1,
+      sender: {
+        id: 2,
+        name: 'Dr. John Smith',
+        avatar: null,
+        role: 'teacher'
+      },
+      recipient: {
+        id: 1,
+        name: 'You',
+        avatar: null,
+        role: 'student'
+      },
+      subject: 'Programming Assignment Feedback',
+      content: 'Hello! I've reviewed your latest programming assignment and have some feedback. Your solution to the array manipulation problem was very efficient, but there are a couple of edge cases you didn't handle. Let me know if you'd like to discuss this further.',
+      timestamp: '2025-05-04T14:30:00Z',
+      isRead: false,
+      type: 'inbox'
+    },
+    {
+      id: 2,
+      sender: {
+        id: 3,
+        name: 'Prof. Maria Johnson',
+        avatar: null,
+        role: 'teacher'
+      },
+      recipient: {
+        id: 1,
+        name: 'You',
+        avatar: null,
+        role: 'student'
+      },
+      subject: 'Math Assignment Due Date Extended',
+      content: 'I wanted to let you know that I've extended the due date for the calculus problem set to next Friday. This should give everyone additional time to work through the more challenging problems. As always, feel free to come to office hours if you need assistance.',
+      timestamp: '2025-05-03T10:15:00Z',
+      isRead: true,
+      type: 'inbox'
+    },
+    {
+      id: 3,
+      sender: {
+        id: 1,
+        name: 'You',
+        avatar: null,
+        role: 'student'
+      },
+      recipient: {
+        id: 2,
+        name: 'Dr. John Smith',
+        avatar: null,
+        role: 'teacher'
+      },
+      subject: 'Question about the Final Project',
+      content: 'Good afternoon Dr. Smith, I'm working on the final project for the programming class and had a question about the requirements. The assignment mentions using a database, but doesn't specify what type. Would it be acceptable to use SQLite for this project, or would you prefer we use PostgreSQL as we did in the earlier modules?',
+      timestamp: '2025-05-02T16:45:00Z',
+      isRead: true,
+      type: 'sent'
+    },
+    {
+      id: 4,
+      sender: {
+        id: 4,
+        name: 'Sarah Williams',
+        avatar: null,
+        role: 'student'
+      },
+      recipient: {
+        id: 1,
+        name: 'You',
+        avatar: null,
+        role: 'student'
+      },
+      subject: 'Study Group for History Exam',
+      content: 'Hi there! A few of us are forming a study group for the upcoming history exam. We're planning to meet at the library this Saturday from 2-4 PM. Would you like to join us? We'll be focusing on the post-World War II era which Prof. Williams mentioned would be a significant part of the exam.',
+      timestamp: '2025-05-01T09:20:00Z',
+      isRead: true,
+      type: 'inbox'
+    },
+    {
+      id: 5,
+      sender: {
+        id: 1,
+        name: 'You',
+        avatar: null,
+        role: 'student'
+      },
+      recipient: {
+        id: 3,
+        name: 'Prof. Maria Johnson',
+        avatar: null,
+        role: 'teacher'
+      },
+      subject: 'Clarification on Homework #3',
+      content: 'Hello Professor Johnson, I'm working on problem #5 of the latest homework and I'm having trouble understanding what formula should be applied here. The problem asks us to find the limit, but I'm not sure if we should be using L'Hôpital's rule or another approach. Could you please clarify?',
+      timestamp: '2025-04-29T11:05:00Z',
+      isRead: true,
+      type: 'sent'
+    },
+    {
+      id: 6,
+      sender: {
+        id: 5,
+        name: 'System Notification',
+        avatar: null,
+        role: 'system'
+      },
+      recipient: {
+        id: 1,
+        name: 'You',
+        avatar: null,
+        role: 'student'
+      },
+      subject: 'New Assignment Posted',
+      content: 'A new assignment "Web Development Final Project" has been posted to your Web Development Bootcamp course. The assignment is due on May 20, 2025. Please login to view the full details and requirements.',
+      timestamp: '2025-04-28T08:00:00Z',
+      isRead: true,
+      type: 'inbox'
+    },
+  ];
 
-  // Fetch messages
-  const { data: messages, isLoading: messagesLoading } = useQuery({
-    queryKey: [API_ENDPOINTS.MESSAGES.LIST],
+  // Filter messages based on the active tab
+  const filteredMessages = messages.filter(message => {
+    if (activeTab === 'inbox') return message.type === 'inbox';
+    if (activeTab === 'sent') return message.type === 'sent';
+    if (activeTab === 'drafts') return message.type === 'draft';
+    return true;
   });
 
-  // Fetch users for new message dialog
-  const { data: sessionData } = useQuery({
-    queryKey: [API_ENDPOINTS.AUTH.SESSION],
-  });
-
-  // Create conversation groups by sender/receiver pairs
-  const conversations = messages ? groupMessages(messages, sessionData?.user?.id) : [];
-
-  // Find selected conversation
-  const selectedMessages = conversations.find(conv => 
-    conv.userId === selectedConversation
-  )?.messages || [];
-
-  // Send message mutation
-  const sendMessageMutation = useMutation({
-    mutationFn: async (data: { receiverId: number; content: string }) => {
-      const response = await apiRequest("POST", API_ENDPOINTS.MESSAGES.CREATE, data);
-      return response.json();
-    },
-    onSuccess: () => {
-      // Clear message input and refetch messages
-      setMessageText("");
-      queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.MESSAGES.LIST] });
-      toast({
-        title: "Message sent",
-        description: "Your message has been sent successfully.",
-      });
-      setNewMessageDialogOpen(false);
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Failed to send message",
-        description: error.message || "An error occurred while sending your message.",
-      });
-    },
-  });
-
-  // Handle sending a message
-  const handleSendMessage = () => {
-    if (!messageText.trim()) return;
-
-    const receiverId = selectedConversation || selectedReceiver;
-    if (!receiverId) return;
-
-    sendMessageMutation.mutate({
-      receiverId,
-      content: messageText,
-    });
-  };
-
-  // Handle starting a new conversation
-  const handleStartNewConversation = () => {
-    if (!selectedReceiver) {
-      toast({
-        variant: "destructive",
-        title: "No recipient selected",
-        description: "Please select a recipient for your message.",
-      });
-      return;
-    }
-
-    if (!messageText.trim()) {
-      toast({
-        variant: "destructive",
-        title: "Empty message",
-        description: "Please enter a message.",
-      });
-      return;
-    }
-
-    sendMessageMutation.mutate({
-      receiverId: selectedReceiver,
-      content: messageText,
-    });
-  };
-
-  // Format timestamp to readable format
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffSec = Math.round(diffMs / 1000);
-    const diffMin = Math.round(diffSec / 60);
-    const diffHr = Math.round(diffMin / 60);
-    const diffDays = Math.round(diffHr / 24);
-    
-    if (diffSec < 60) return 'just now';
-    if (diffMin < 60) return `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`;
-    if (diffHr < 24) return `${diffHr} hour${diffHr > 1 ? 's' : ''} ago`;
-    if (diffDays === 1) return 'yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    
-    return date.toLocaleDateString();
-  };
-
-  // Select contact info (name, profile picture) from message
-  const getContactInfo = (conversation: any) => {
-    if (!conversation || !conversation.user) return { name: "Unknown", role: "", avatar: "" };
-    
-    const { firstName, lastName, role, profileImage } = conversation.user;
-    const name = `${firstName} ${lastName}`;
-    const formattedRole = role.charAt(0).toUpperCase() + role.slice(1);
-    
-    return { 
-      name, 
-      role: formattedRole, 
-      avatar: profileImage 
-    };
+  // Get initials for avatar fallback
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase();
   };
 
   return (
-    <div>
-      <div className="pb-5 border-b border-gray-200 dark:border-gray-700 mb-6 flex justify-between items-center">
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white font-montserrat">
-            Messages
-          </h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Communicate with teachers, students, and parents
+          <h1 className="text-3xl font-bold">Messages</h1>
+          <p className="text-gray-500 dark:text-gray-400">
+            Communicate with your teachers and classmates
           </p>
         </div>
-        <Dialog open={newMessageDialogOpen} onOpenChange={setNewMessageDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <PencilIcon className="mr-2 h-4 w-4" />
-              New Message
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
-            <DialogHeader>
-              <DialogTitle>New Message</DialogTitle>
-            </DialogHeader>
-            <div className="py-4">
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  To:
-                </label>
-                <div className="grid grid-cols-1 gap-2 max-h-[150px] overflow-y-auto">
-                  {conversations.map((conversation) => {
-                    const { name, role, avatar } = getContactInfo(conversation);
-                    return (
-                      <div 
-                        key={conversation.userId}
-                        onClick={() => setSelectedReceiver(conversation.userId)}
-                        className={`flex items-center p-2 cursor-pointer rounded-md ${
-                          selectedReceiver === conversation.userId 
-                            ? "bg-primary-50 dark:bg-gray-700" 
-                            : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                        }`}
-                      >
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage src={avatar} alt={name} />
-                          <AvatarFallback>{name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div className="ml-3">
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">{name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{role}</p>
-                        </div>
-                        {selectedReceiver === conversation.userId && (
-                          <div className="ml-auto">
-                            <div className="h-4 w-4 rounded-full bg-primary-500"></div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Message:
-                </label>
-                <Textarea
-                  value={messageText}
-                  onChange={(e) => setMessageText(e.target.value)}
-                  className="min-h-[100px]"
-                  placeholder="Type your message here..."
-                />
-              </div>
-              <div className="flex justify-end">
-                <Button 
-                  onClick={handleStartNewConversation}
-                  disabled={sendMessageMutation.isPending}
-                >
-                  {sendMessageMutation.isPending ? "Sending..." : "Send Message"}
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button 
+          onClick={() => navigate('/messages/compose')}
+          className="w-full md:w-auto"
+        >
+          <PenBox className="mr-2 h-4 w-4" />
+          Compose Message
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Conversation List */}
-        <div className="col-span-1">
-          <Card className="overflow-hidden">
-            <CardHeader className="pb-3">
-              <CardTitle>Conversations</CardTitle>
-              <CardDescription>Select a conversation to view messages</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              {messagesLoading ? (
-                <div className="p-4 animate-pulse space-y-4">
-                  {[...Array(4)].map((_, i) => (
-                    <div key={i} className="flex items-center space-x-4">
-                      <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                      <div className="space-y-2 flex-1">
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : conversations.length > 0 ? (
-                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {conversations.map((conversation) => {
-                    const { name, role, avatar } = getContactInfo(conversation);
-                    const lastMessage = conversation.messages[0];
-                    const unreadCount = conversation.messages.filter(msg => 
-                      !msg.read && msg.receiverId === sessionData?.user?.id
-                    ).length;
-                    
-                    return (
-                      <li 
-                        key={conversation.userId}
-                        onClick={() => setSelectedConversation(conversation.userId)}
-                        className={`px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer ${
-                          selectedConversation === conversation.userId 
-                            ? "bg-primary-50 dark:bg-gray-700" 
-                            : ""
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 relative">
-                            <Avatar className="h-10 w-10">
-                              <AvatarImage src={avatar} alt={name} />
-                              <AvatarFallback>{name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            {unreadCount > 0 && (
-                              <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary ring-2 ring-white dark:ring-gray-800"></span>
-                            )}
-                          </div>
-                          <div className="ml-3 flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                {name}
-                              </p>
-                              {lastMessage && (
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                  {formatTimeAgo(lastMessage.sentAt)}
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                {role}
-                              </p>
-                              {unreadCount > 0 && (
-                                <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-100 text-xs font-semibold">
-                                  {unreadCount}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {lastMessage && (
-                          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 truncate">
-                            {lastMessage.content}
-                          </p>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <div className="p-4 text-center">
-                  <p className="text-gray-500 dark:text-gray-400">No conversations found</p>
-                  <Button 
-                    variant="outline" 
-                    className="mt-2"
-                    onClick={() => setNewMessageDialogOpen(true)}
-                  >
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Start a conversation
-                  </Button>
-                </div>
-              )}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Message categories sidebar */}
+        <div className="md:col-span-1">
+          <Card>
+            <CardContent className="p-4">
+              <nav className="space-y-1">
+                <Button 
+                  variant={activeTab === 'inbox' ? 'default' : 'ghost'} 
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab('inbox')}
+                >
+                  <Inbox className="mr-2 h-4 w-4" />
+                  Inbox
+                  <Badge className="ml-auto">{messages.filter(m => m.type === 'inbox' && !m.isRead).length}</Badge>
+                </Button>
+                <Button 
+                  variant={activeTab === 'sent' ? 'default' : 'ghost'} 
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab('sent')}
+                >
+                  <SendIcon className="mr-2 h-4 w-4" />
+                  Sent
+                </Button>
+                <Button 
+                  variant={activeTab === 'drafts' ? 'default' : 'ghost'} 
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab('drafts')}
+                >
+                  <PenBox className="mr-2 h-4 w-4" />
+                  Drafts
+                </Button>
+              </nav>
             </CardContent>
           </Card>
         </div>
 
-        {/* Message Thread */}
-        <div className="col-span-1 md:col-span-2">
-          <Card className="h-full flex flex-col">
-            {selectedConversation ? (
-              <>
-                <CardHeader className="pb-3 border-b">
-                  {conversations.some(c => c.userId === selectedConversation) && (
-                    <div className="flex items-center">
+        {/* Message list and content */}
+        <div className="md:col-span-3">
+          <Card>
+            <CardHeader className="p-4 border-b">
+              <div className="flex items-center justify-between">
+                <CardTitle>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</CardTitle>
+                <div className="relative w-full max-w-sm ml-auto">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <input
+                    type="search"
+                    placeholder="Search messages..."
+                    className="pl-8 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
+              </div>
+            </CardHeader>
+            
+            {filteredMessages.length > 0 ? (
+              <div className="divide-y">
+                {filteredMessages.map((message) => (
+                  <div 
+                    key={message.id} 
+                    className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors
+                      ${!message.isRead && activeTab === 'inbox' ? 'bg-blue-50 dark:bg-blue-900/10' : ''}`}
+                    onClick={() => navigate(`/messages/${message.id}`)}
+                  >
+                    <div className="flex items-start gap-4">
                       <Avatar className="h-10 w-10">
                         <AvatarImage 
-                          src={getContactInfo(conversations.find(c => c.userId === selectedConversation)).avatar} 
-                          alt={getContactInfo(conversations.find(c => c.userId === selectedConversation)).name} 
+                          src={message.type === 'sent' 
+                            ? message.recipient.avatar 
+                            : message.sender.avatar
+                          } 
+                          alt="Avatar" 
                         />
                         <AvatarFallback>
-                          {getContactInfo(conversations.find(c => c.userId === selectedConversation)).name.charAt(0)}
+                          {message.type === 'sent' 
+                            ? getInitials(message.recipient.name)
+                            : getInitials(message.sender.name)
+                          }
                         </AvatarFallback>
                       </Avatar>
-                      <div className="ml-3">
-                        <CardTitle>
-                          {getContactInfo(conversations.find(c => c.userId === selectedConversation)).name}
-                        </CardTitle>
-                        <CardDescription>
-                          {getContactInfo(conversations.find(c => c.userId === selectedConversation)).role}
-                        </CardDescription>
-                      </div>
-                    </div>
-                  )}
-                </CardHeader>
-                <CardContent className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[400px]">
-                  {selectedMessages.map((message) => {
-                    const isCurrentUser = message.senderId === sessionData?.user?.id;
-                    
-                    return (
-                      <div 
-                        key={message.id} 
-                        className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
-                      >
-                        <div 
-                          className={`max-w-[75%] rounded-lg px-4 py-2 ${
-                            isCurrentUser 
-                              ? 'bg-primary text-white' 
-                              : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
-                          }`}
-                        >
-                          <p className="text-sm">{message.content}</p>
-                          <p className={`text-xs mt-1 ${
-                            isCurrentUser 
-                              ? 'text-primary-100' 
-                              : 'text-gray-500 dark:text-gray-400'
-                          }`}>
-                            {formatTimeAgo(message.sentAt)}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start">
+                          <p className={`text-sm font-medium truncate ${!message.isRead && activeTab === 'inbox' ? 'text-blue-600 dark:text-blue-400' : ''}`}>
+                            {message.type === 'sent' ? message.recipient.name : message.sender.name}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap ml-2">
+                            {formatDate(message.timestamp, { month: 'short', day: 'numeric' })}
                           </p>
                         </div>
+                        <p className={`text-sm font-medium ${!message.isRead && activeTab === 'inbox' ? 'text-blue-600 dark:text-blue-400' : ''}`}>
+                          {message.subject}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                          {message.content}
+                        </p>
                       </div>
-                    );
-                  })}
-                  
-                  {selectedMessages.length === 0 && (
-                    <div className="text-center py-8">
-                      <p className="text-gray-500 dark:text-gray-400">No messages in this conversation yet</p>
                     </div>
-                  )}
-                </CardContent>
-                <div className="p-4 border-t">
-                  <div className="flex space-x-2">
-                    <Textarea
-                      value={messageText}
-                      onChange={(e) => setMessageText(e.target.value)}
-                      placeholder="Type your message here..."
-                      className="resize-none"
-                    />
-                    <Button 
-                      onClick={handleSendMessage}
-                      disabled={!messageText.trim() || sendMessageMutation.isPending}
-                    >
-                      Send
-                    </Button>
                   </div>
-                </div>
-              </>
+                ))}
+              </div>
             ) : (
-              <div className="flex items-center justify-center flex-1 p-8">
-                <div className="text-center">
-                  <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                    <i className="fas fa-comment-alt text-gray-500 dark:text-gray-400 text-xl"></i>
-                  </div>
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    Select a conversation
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400 mb-4">
-                    Choose a conversation from the list or start a new one
-                  </p>
-                  <Button 
-                    onClick={() => setNewMessageDialogOpen(true)}
-                  >
-                    <PencilIcon className="mr-2 h-4 w-4" />
-                    New Message
-                  </Button>
+              <div className="flex flex-col items-center justify-center p-8">
+                <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20 mb-4">
+                  <MessageSquare className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
+                <h3 className="text-lg font-medium">No messages in {activeTab}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
+                  {activeTab === 'inbox' 
+                    ? 'Your inbox is empty. Messages from teachers and classmates will appear here.' 
+                    : activeTab === 'sent'
+                      ? 'You haven\'t sent any messages yet.'
+                      : 'You don\'t have any draft messages.'}
+                </p>
+                {activeTab !== 'sent' && (
+                  <Button
+                    className="mt-4"
+                    onClick={() => navigate('/messages/compose')}
+                  >
+                    <PenBox className="mr-2 h-4 w-4" />
+                    Compose Message
+                  </Button>
+                )}
               </div>
             )}
           </Card>
@@ -422,45 +322,4 @@ export default function Messages() {
       </div>
     </div>
   );
-}
-
-// Helper function to group messages by conversation
-function groupMessages(messages: Message[], currentUserId?: number) {
-  if (!messages || !currentUserId) return [];
-
-  // Create a map of conversations by the other user's ID
-  const conversationsMap = new Map<number, { 
-    userId: number;
-    user: User | undefined;
-    messages: Message[];
-  }>();
-
-  // Sort messages by date (newest first)
-  const sortedMessages = [...messages].sort(
-    (a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime()
-  );
-
-  sortedMessages.forEach(message => {
-    // Determine the other user in the conversation
-    const otherUserId = message.senderId === currentUserId 
-      ? message.receiverId 
-      : message.senderId;
-    
-    const otherUser = message.senderId === currentUserId 
-      ? message.receiver 
-      : message.sender;
-    
-    if (!conversationsMap.has(otherUserId)) {
-      conversationsMap.set(otherUserId, {
-        userId: otherUserId,
-        user: otherUser,
-        messages: []
-      });
-    }
-    
-    conversationsMap.get(otherUserId)!.messages.push(message);
-  });
-
-  // Convert map to array
-  return Array.from(conversationsMap.values());
 }
