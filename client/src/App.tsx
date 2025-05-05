@@ -61,7 +61,7 @@ function AuthenticatedApp() {
       
       <ProtectedRoute path="/settings" component={() => (
         <MainLayout>
-          <PlaceholderPage title="Account Settings" />
+          <AccountSettingsPage />
         </MainLayout>
       )} />
       
@@ -156,7 +156,7 @@ function AuthenticatedApp() {
       {/* Forums */}
       <ProtectedRoute path="/forums" component={() => (
         <MainLayout>
-          <PlaceholderPage title="Discussion Forums" />
+          <ForumsPage />
         </MainLayout>
       )} />
       
@@ -210,7 +210,7 @@ function AuthenticatedApp() {
       {/* Learning Tools */}
       <ProtectedRoute path="/tools" component={() => (
         <MainLayout>
-          <PlaceholderPage title="Learning Tools" />
+          <LearningToolsPage />
         </MainLayout>
       )} />
       
