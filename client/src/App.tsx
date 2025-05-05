@@ -5,6 +5,7 @@ import { queryClient } from '@/lib/queryClient';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
 import { ProtectedRoute } from '@/lib/protected-route';
+import { ThemeProvider } from '@/lib/theme-provider';
 
 // Pages
 import LandingPage from '@/pages/landing';
@@ -16,11 +17,14 @@ import CoursesCreatePage from '@/pages/courses-create';
 import AssignmentsPage from '@/pages/assignments';
 import AssignmentsCreatePage from '@/pages/assignments-create';
 import MessagesPage from '@/pages/messages';
+import MessageComposePage from '@/pages/message-compose';
 import ProfilePage from '@/pages/profile';
 import VirtualLabsPage from '@/pages/virtual-labs';
 import GradesPage from '@/pages/grades';
 import ForumsPage from '@/pages/forums';
 import LearningToolsPage from '@/pages/learning-tools';
+import AccountSettingsPage from '@/pages/account-settings';
+import ClassesPage from '@/pages/classes';
 
 // Layouts
 import MainLayout from '@/components/layouts/MainLayout';
@@ -126,7 +130,7 @@ function AuthenticatedApp() {
       {(userRole === 'teacher' || userRole === 'admin_teacher' || userRole === 'admin') && (
         <ProtectedRoute path="/classes" component={() => (
           <MainLayout>
-            <PlaceholderPage title="Class Management" />
+            <ClassesPage />
           </MainLayout>
         )} />
       )}
@@ -265,8 +269,10 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AuthenticatedApp />
-        <Toaster />
+        <ThemeProvider defaultTheme="dark">
+          <AuthenticatedApp />
+          <Toaster />
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
