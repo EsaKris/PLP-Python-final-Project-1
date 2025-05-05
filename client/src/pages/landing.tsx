@@ -35,12 +35,12 @@ export default function LandingPage() {
           <div className="flex items-center space-x-4">
             <Button
               variant="outline"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/auth')}
             >
               Log In
             </Button>
             <Button 
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/auth?tab=register')}
             >
               Sign Up
             </Button>
@@ -62,14 +62,14 @@ export default function LandingPage() {
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <Button 
                   size="lg"
-                  onClick={() => navigate('/register')}
+                  onClick={() => navigate('/auth?tab=register')}
                 >
                   Get Started
                 </Button>
                 <Button 
                   variant="outline" 
                   size="lg"
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate('/auth')}
                 >
                   Explore Courses
                 </Button>
@@ -211,7 +211,7 @@ export default function LandingPage() {
           <Button 
             size="lg"
             variant="secondary"
-            onClick={() => navigate('/register')}
+            onClick={() => navigate('/auth?tab=register')}
             className="bg-white text-blue-600 hover:bg-gray-100"
           >
             Sign Up Now

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { Redirect } from "wouter";
+import { Redirect, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,6 +30,16 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function AuthPage() {
   const { user, isLoading, loginMutation, registerMutation } = useAuth();
   const [activeTab, setActiveTab] = useState<string>("login");
+  const [location] = useLocation();
+  
+  // Check URL for tab parameter
+  useEffect(() => {
+    const params = new URLSearchParams(location.split('?')[1]);
+    const tabParam = params.get('tab');
+    if (tabParam === 'register') {
+      setActiveTab('register');
+    }
+  }, [location]);
 
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -61,7 +71,13 @@ export default function AuthPage() {
   };
 
   const onRegisterSubmit = (data: RegisterFormValues) => {
-    registerMutation.mutate(data);
+    // Transform the data to include both camelCase and snake_case fields
+    const transformedData = {
+      ...data,
+      firstName: data.first_name,
+      lastName: data.last_name
+    };
+    registerMutation.mutate(transformedData);
   };
 
   return (
