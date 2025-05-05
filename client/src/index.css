@@ -114,6 +114,128 @@
   }
 }
 
+@layer components {
+  /* Card styles */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .dashboard-card {
+    @apply flex flex-col p-6 rounded-lg border bg-card shadow-sm;
+  }
+  
+  .dashboard-card-interactive {
+    @apply dashboard-card card-hover;
+  }
+  
+  .dashboard-stat-card {
+    @apply flex flex-col p-6 rounded-lg border bg-card text-card-foreground shadow-sm;
+  }
+  
+  .content-area {
+    @apply p-6 rounded-lg border bg-card text-card-foreground shadow-sm;
+  }
+  
+  /* Status badges */
+  .pill-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  
+  .status-badge-pending {
+    @apply pill-badge bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-500;
+  }
+  
+  .status-badge-completed {
+    @apply pill-badge bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-500;
+  }
+  
+  .status-badge-overdue {
+    @apply pill-badge bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-500;
+  }
+  
+  .status-badge-active {
+    @apply pill-badge bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-500;
+  }
+  
+  .status-badge-draft {
+    @apply pill-badge bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400;
+  }
+  
+  /* Navigation */
+  .nav-link {
+    @apply flex items-center gap-2 p-2 rounded-md text-foreground/80 hover:bg-muted transition-colors;
+  }
+  
+  .nav-link-active {
+    @apply nav-link bg-primary/10 text-primary font-medium;
+  }
+  
+  /* Data grids */
+  .data-grid {
+    @apply w-full border rounded-lg overflow-hidden;
+  }
+  
+  .data-grid-header {
+    @apply bg-muted/50 text-sm font-medium;
+  }
+  
+  .data-grid-row {
+    @apply border-b last:border-0 hover:bg-muted/50 transition-colors;
+  }
+  
+  .data-grid-cell {
+    @apply p-3 align-middle;
+  }
+  
+  /* Interactive components */
+  .hover-card {
+    @apply transition-all hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  /* Course card */
+  .course-card {
+    @apply relative overflow-hidden rounded-lg border shadow-sm hover:shadow-md transition-all;
+  }
+  
+  .course-card-image {
+    @apply h-48 w-full object-cover;
+  }
+  
+  .course-card-banner {
+    @apply absolute top-0 left-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-medium;
+  }
+  
+  .course-card-content {
+    @apply p-4;
+  }
+  
+  /* Assignment card */
+  .assignment-card {
+    @apply rounded-lg border p-4 hover:shadow-md transition-all;
+  }
+  
+  .assignment-card-header {
+    @apply flex items-start justify-between mb-2;
+  }
+  
+  /* Forums */
+  .forum-post {
+    @apply rounded-lg border p-4 mb-4;
+  }
+  
+  .forum-post-header {
+    @apply flex items-center justify-between mb-2 pb-2 border-b;
+  }
+  
+  .forum-post-author {
+    @apply flex items-center gap-2;
+  }
+  
+  .forum-post-avatar {
+    @apply h-10 w-10 rounded-full;
+  }
+}
+
 @layer utilities {
   .font-montserrat {
     font-family: 'Montserrat', sans-serif;
@@ -125,5 +247,17 @@
   
   .font-firacode {
     font-family: 'Fira Code', monospace;
+  }
+  
+  .glass-effect {
+    @apply bg-white/80 dark:bg-black/50 backdrop-blur-md;
+  }
+  
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+  }
+  
+  .grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }

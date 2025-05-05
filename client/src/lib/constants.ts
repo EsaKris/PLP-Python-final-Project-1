@@ -141,41 +141,179 @@ export const MESSAGE_TYPES = [
   { value: 'system_notification', label: 'System Notification' },
 ];
 
-// Navigation items for sidebar/navbar
-export const NAVIGATION_ITEMS = [
-  { 
-    label: 'Dashboard', 
-    href: '/home',
-    icon: 'LayoutDashboard'
-  },
-  { 
-    label: 'Courses', 
-    href: '/courses',
-    icon: 'GraduationCap' 
-  },
-  { 
-    label: 'Assignments', 
-    href: '/assignments',
-    icon: 'FileText' 
-  },
-  { 
-    label: 'Messages', 
-    href: '/messages',
-    icon: 'MessageSquare' 
-  },
-  { 
-    label: 'Forums', 
-    href: '/forums',
-    icon: 'MessageCircle' 
-  },
-  { 
-    label: 'Virtual Labs', 
-    href: '/labs',
-    icon: 'Beaker' 
-  },
-  { 
-    label: 'Learning Tools', 
-    href: '/tools',
-    icon: 'Wrench' 
-  },
-];
+// Navigation items for sidebar/navbar by role
+export const NAVIGATION_ITEMS = {
+  // Common items for all roles
+  common: [
+    { 
+      label: 'Dashboard', 
+      href: '/home',
+      icon: 'LayoutDashboard'
+    },
+    { 
+      label: 'Messages', 
+      href: '/messages',
+      icon: 'MessageSquare' 
+    },
+    { 
+      label: 'Profile', 
+      href: '/profile',
+      icon: 'User' 
+    },
+    { 
+      label: 'Settings', 
+      href: '/settings',
+      icon: 'Settings' 
+    },
+  ],
+  
+  // Student-specific items
+  student: [
+    { 
+      label: 'My Courses', 
+      href: '/courses',
+      icon: 'GraduationCap' 
+    },
+    { 
+      label: 'Assignments', 
+      href: '/assignments',
+      icon: 'FileText' 
+    },
+    { 
+      label: 'Grades', 
+      href: '/grades',
+      icon: 'BarChart' 
+    },
+    { 
+      label: 'Forums', 
+      href: '/forums',
+      icon: 'MessageCircle' 
+    },
+    { 
+      label: 'Virtual Labs', 
+      href: '/labs',
+      icon: 'Beaker' 
+    },
+    { 
+      label: 'Learning Tools', 
+      href: '/tools',
+      icon: 'Wrench' 
+    },
+  ],
+  
+  // Teacher-specific items
+  teacher: [
+    { 
+      label: 'My Courses', 
+      href: '/courses',
+      icon: 'GraduationCap' 
+    },
+    { 
+      label: 'Create Course', 
+      href: '/courses/create',
+      icon: 'PlusCircle' 
+    },
+    { 
+      label: 'Assignments', 
+      href: '/assignments',
+      icon: 'FileText' 
+    },
+    { 
+      label: 'Create Assignment', 
+      href: '/assignments/create',
+      icon: 'FilePlus' 
+    },
+    { 
+      label: 'Grade Book', 
+      href: '/grades',
+      icon: 'ClipboardCheck' 
+    },
+    { 
+      label: 'Students', 
+      href: '/students',
+      icon: 'Users' 
+    },
+    { 
+      label: 'Forums', 
+      href: '/forums',
+      icon: 'MessageCircle' 
+    },
+    { 
+      label: 'Classes', 
+      href: '/classes',
+      icon: 'Layout' 
+    },
+  ],
+  
+  // Admin teacher additional items
+  admin_teacher: [
+    { 
+      label: 'Admin Panel', 
+      href: '/admin',
+      icon: 'Shield' 
+    },
+    {
+      label: 'Teachers', 
+      href: '/teachers',
+      icon: 'UserCheck' 
+    },
+  ],
+  
+  // Parent-specific items
+  parent: [
+    { 
+      label: 'My Children', 
+      href: '/children',
+      icon: 'Users' 
+    },
+    { 
+      label: 'Progress Reports', 
+      href: '/progress',
+      icon: 'TrendingUp' 
+    },
+    { 
+      label: 'Parent Forums', 
+      href: '/parent-forums',
+      icon: 'MessageCircle' 
+    },
+    { 
+      label: 'Teacher Meetings', 
+      href: '/meetings',
+      icon: 'Calendar' 
+    },
+    { 
+      label: 'School Announcements', 
+      href: '/announcements',
+      icon: 'Bell' 
+    },
+  ],
+  
+  // Admin-specific items
+  admin: [
+    { 
+      label: 'Admin Dashboard', 
+      href: '/admin',
+      icon: 'Shield' 
+    },
+    { 
+      label: 'Manage Users', 
+      href: '/admin/users',
+      icon: 'Users' 
+    },
+    { 
+      label: 'Manage Courses', 
+      href: '/admin/courses',
+      icon: 'BookOpen' 
+    },
+    { 
+      label: 'System Settings', 
+      href: '/admin/settings',
+      icon: 'Settings' 
+    },
+    { 
+      label: 'Reports', 
+      href: '/admin/reports',
+      icon: 'BarChart2' 
+    },
+  ],
+};
