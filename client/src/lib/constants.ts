@@ -1,88 +1,120 @@
-// API endpoints
+/**
+ * API endpoint constants
+ */
 export const API_ENDPOINTS = {
   AUTH: {
     SESSION: '/api/auth/session',
     LOGIN: '/api/auth/login',
+    REGISTER: '/api/auth/register',
     LOGOUT: '/api/auth/logout',
-  },
-  USERS: {
-    ME: '/api/users/me',
+    PROFILE: '/api/auth/profile'
   },
   COURSES: {
     LIST: '/api/courses',
-    DETAIL: (id: number) => `/api/courses/${id}`,
-  },
-  ENROLLMENTS: {
-    LIST: '/api/enrollments',
+    DETAILS: (id: number) => `/api/courses/${id}`,
+    ENROLL: '/api/enrollments',
+    MY_COURSES: '/api/courses/my-courses',
+    MODULES: (courseId: number) => `/api/courses/${courseId}/modules`,
+    PROGRESS: (enrollmentId: number) => `/api/enrollments/${enrollmentId}/progress`
   },
   ASSIGNMENTS: {
     LIST: '/api/assignments',
-    CREATE: '/api/assignments',
+    DETAILS: (id: number) => `/api/assignments/${id}`,
+    SUBMIT: (id: number) => `/api/assignments/${id}/submit`,
+    MY_ASSIGNMENTS: '/api/assignments/my-assignments',
+    SUBMISSIONS: (id: number) => `/api/assignments/${id}/submissions`
   },
   MESSAGES: {
     LIST: '/api/messages',
-    CREATE: '/api/messages',
+    SEND: '/api/messages/send',
+    DETAILS: (id: number) => `/api/messages/${id}`,
+    MARK_READ: (id: number) => `/api/messages/${id}/read`
   },
-  LEARNING_TOOLS: {
-    LIST: '/api/learning-tools',
+  FORUMS: {
+    LIST: '/api/forums',
+    TOPICS: (forumId: number) => `/api/forums/${forumId}/topics`,
+    POSTS: (topicId: number) => `/api/topics/${topicId}/posts`,
+    CREATE_TOPIC: '/api/topics',
+    CREATE_POST: (topicId: number) => `/api/topics/${topicId}/posts`,
   },
-};
-
-// Navigation items
-export const NAVIGATION_ITEMS = [
-  { path: '/', label: 'Dashboard', icon: 'fas fa-home' },
-  { path: '/courses', label: 'My Courses', icon: 'fas fa-book' },
-  { path: '/assignments', label: 'Assignments', icon: 'fas fa-tasks' },
-  { path: '/messages', label: 'Messages', icon: 'fas fa-comment-alt' },
-];
-
-// Sidebar categories
-export const SIDEBAR_CATEGORIES = {
-  LEARNING: {
-    title: 'Your Learning',
-    items: [
-      { path: '/courses', label: 'My Courses', icon: 'fas fa-book' },
-      { path: '/assignments', label: 'Assignments', icon: 'fas fa-tasks' },
-      { path: '/progress', label: 'Progress', icon: 'fas fa-chart-line' },
-      { path: '/achievements', label: 'Achievements', icon: 'fas fa-award' },
-    ],
-  },
-  COMMUNICATION: {
-    title: 'Communication',
-    items: [
-      { path: '/messages', label: 'Messages', icon: 'fas fa-comment-alt' },
-      { path: '/forums', label: 'Discussion Forums', icon: 'fas fa-users' },
-      { path: '/schedule', label: 'Schedule', icon: 'fas fa-calendar-alt' },
-    ],
+  LABS: {
+    LIST: '/api/labs',
+    DETAILS: (id: number) => `/api/labs/${id}`,
+    MY_LABS: '/api/labs/my-labs',
   },
   TOOLS: {
-    title: 'Tools',
-    items: [
-      { path: '/tools/virtual-labs', label: 'Virtual Labs', icon: 'fas fa-flask' },
-      { path: '/tools/writing-workshop', label: 'Writing Workshop', icon: 'fas fa-pen-alt' },
-      { path: '/tools/language-tools', label: 'Language Tools', icon: 'fas fa-language' },
-      { path: '/tools/math-solver', label: 'Math Problem Solver', icon: 'fas fa-calculator' },
-    ],
-  },
+    LIST: '/api/tools',
+    DETAILS: (id: number) => `/api/tools/${id}`,
+  }
 };
 
-// Tool categories
-export const TOOL_CATEGORIES = {
-  VIRTUAL_LABS: 'virtual_labs',
-  WRITING_WORKSHOP: 'writing_workshop',
-  LANGUAGE_TOOLS: 'language_tools',
-  MATH_SOLVER: 'math_solver',
+/**
+ * Navigation constants
+ */
+export const NAVIGATION_ITEMS = [
+  { title: 'Home', href: '/home', icon: 'Home' },
+  { title: 'Courses', href: '/courses', icon: 'BookOpen' },
+  { title: 'Assignments', href: '/assignments', icon: 'FileText' },
+  { title: 'Messages', href: '/messages', icon: 'MessageSquare' },
+  { title: 'Forums', href: '/forums', icon: 'MessageCircle' },
+  { title: 'Virtual Labs', href: '/labs', icon: 'Flask' },
+  { title: 'Learning Tools', href: '/tools', icon: 'Tool' },
+];
+
+/**
+ * User role constants
+ */
+export const USER_ROLES = {
+  STUDENT: 'student',
+  TEACHER: 'teacher',
+  ADMIN_TEACHER: 'admin_teacher',
+  PARENT: 'parent',
+  ADMIN: 'admin',
 };
 
-// Date format options
-export const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
+/**
+ * Assignment constants
+ */
+export const ASSIGNMENT_STATUSES = {
+  NOT_STARTED: 'not_started',
+  IN_PROGRESS: 'in_progress',
+  SUBMITTED: 'submitted',
+  GRADED: 'graded',
+  LATE: 'late',
 };
 
-// Time format options
-export const TIME_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
-  hour: '2-digit',
-  minute: '2-digit',
-};
+/**
+ * Course constants
+ */
+export const COURSE_LEVELS = [
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+];
+
+/**
+ * Subject constants
+ */
+export const SUBJECT_AREAS = [
+  { value: 'mathematics', label: 'Mathematics' },
+  { value: 'science', label: 'Science' },
+  { value: 'programming', label: 'Programming' },
+  { value: 'english', label: 'English' },
+  { value: 'history', label: 'History' },
+  { value: 'geography', label: 'Geography' },
+  { value: 'art', label: 'Art' },
+  { value: 'music', label: 'Music' },
+  { value: 'physical_education', label: 'Physical Education' },
+  { value: 'languages', label: 'Languages' },
+];
+
+/**
+ * Grade level constants
+ */
+export const GRADE_LEVELS = [
+  { value: 'elementary', label: 'Elementary (Grades 1-5)' },
+  { value: 'middle_school', label: 'Middle School (Grades 6-8)' },
+  { value: 'high_school', label: 'High School (Grades 9-12)' },
+  { value: 'college', label: 'College/University' },
+  { value: 'professional', label: 'Professional Development' },
+];

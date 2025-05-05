@@ -76,3 +76,22 @@ export function isAuthenticated() {
 export function getCurrentUser() {
   return queryClient.getQueryData<any>(['api/auth/profile']);
 }
+
+// Default fetcher function for useQuery
+export async function defaultFetcher({ queryKey }: { queryKey: any[] }) {
+  const [url, params] = queryKey;
+  const response = await apiRequest('GET', url, params);
+  
+  if (!response.ok) {
+    // Try to parse error message from response
+    try {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `API Error: ${response.status}`);
+    } catch (e) {
+      // If parsing fails, throw a generic error
+      throw new Error(`API Error: ${response.status}`);
+    }
+  }
+  
+  return response.json();
+}

@@ -1,63 +1,84 @@
-import { Switch, Route } from "wouter";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/home";
-import Courses from "@/pages/courses";
-import Assignments from "@/pages/assignments";
-import Messages from "@/pages/messages";
-import { queryClient } from "./lib/queryClient";
-import { ThemeProvider } from "./components/ThemeProvider";
-import MainLayout from "./components/layouts/MainLayout";
-import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useEffect } from 'react';
+import { Route, Switch, useLocation } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
+import { API_ENDPOINTS } from '@/lib/constants';
+import { defaultFetcher } from '@/lib/query';
 
-function Router() {
-  const { data: session, isLoading } = useQuery({
-    queryKey: ['/api/auth/session'],
+// Pages
+import LandingPage from '@/pages/landing';
+import RegisterPage from '@/pages/register';
+import LoginPage from '@/pages/login';
+import NotFoundPage from '@/pages/not-found';
+
+// Layouts
+import MainLayout from '@/components/layouts/MainLayout';
+
+export default function App() {
+  const [location] = useLocation();
+  
+  // Check if user is authenticated
+  const { data: sessionData } = useQuery({
+    queryKey: [API_ENDPOINTS.AUTH.SESSION],
+    queryFn: defaultFetcher,
+    refetchOnWindowFocus: true,
+    retry: false
   });
-
-  // If not logged in, redirect to login page
+  
+  // Authentication state
+  const isAuthenticated = sessionData?.authenticated === true;
+  
+  // Effect to redirect if user is already authenticated
   useEffect(() => {
-    if (!isLoading && session && !session.authenticated) {
-      // In a real app, we would redirect to login
-      // For now, we'll use the seeded user automatically
-      fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: 'maria_student',
-          password: 'password123'
-        }),
-        credentials: 'include'
-      });
+    if (isAuthenticated && (location === '/' || location === '/login' || location === '/register')) {
+      window.location.href = '/home';
     }
-  }, [isLoading, session]);
+  }, [isAuthenticated, location]);
 
+  // Landing page for non-authenticated users
+  if (location === '/' && !isAuthenticated) {
+    return <LandingPage />;
+  }
+  
+  // Auth pages (login and register) for non-authenticated users
+  if ((location === '/login' || location === '/register') && !isAuthenticated) {
+    // Render auth pages outside of the main layout
+    return (
+      <Switch>
+        <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
+      </Switch>
+    );
+  }
+
+  // Main application with layout for authenticated users
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/courses" component={Courses} />
-      <Route path="/assignments" component={Assignments} />
-      <Route path="/messages" component={Messages} />
-      <Route component={NotFound} />
-    </Switch>
+    <MainLayout>
+      <Switch>
+        <Route path="/home">
+          <div>Home Dashboard</div>
+        </Route>
+        <Route path="/courses">
+          <div>Courses Page</div>
+        </Route>
+        <Route path="/assignments">
+          <div>Assignments Page</div>
+        </Route>
+        <Route path="/messages">
+          <div>Messages Page</div>
+        </Route>
+        <Route path="/labs">
+          <div>Virtual Labs Page</div>
+        </Route>
+        <Route path="/forums">
+          <div>Forums Page</div>
+        </Route>
+        <Route path="/tools">
+          <div>Learning Tools Page</div>
+        </Route>
+        <Route>
+          <NotFoundPage />
+        </Route>
+      </Switch>
+    </MainLayout>
   );
 }
-
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light" storageKey="techiekraft-theme">
-        <MainLayout>
-          <Router />
-        </MainLayout>
-        <Toaster />
-      </ThemeProvider>
-    </QueryClientProvider>
-  );
-}
-
-export default App;
