@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-  <img src="[https://raw.githubusercontent.com/EsaKris/TechieKraft/main/generated-icon.png](https://github.com/EsaKris/PLP-Python-final-Project-1/blob/main/generated-icon.png)" alt="TechieKraft Logo" width="80%" style="border-radius: 50px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  <img src="https://github.com/EsaKris/PLP-Python-final-Project-1/blob/main/generated-icon.png" alt="TechieKraft Logo" width="80%" style="border-radius: 50px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
   <br />
 
   <div>
