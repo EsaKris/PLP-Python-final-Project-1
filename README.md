@@ -189,7 +189,7 @@ Please ensure your code follows our style guidelines:
 - Meaningful commit messages
 - Include tests for new features
 
-'''
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -208,9 +208,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   </a>
 </div>
 
----
+
 
 <div align="center">
   Made with ❤️ by Esa Kris | © 2023 TechieKraft
 </div>
-```
